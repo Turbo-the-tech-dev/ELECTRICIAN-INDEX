@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Electrician Dev Dashboard ⚡</title>
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --secondary: #00aaff;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #e0e0e0;
+            --card-bg: #111111;
+            --glow: 0 0 15px rgba(255, 107, 0, 0.5);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+        }
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* CRT scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(to bottom, transparent 0%, rgba(0, 255, 0, 0.03) 1px, transparent 2px);
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 10s linear infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .flicker {
+            animation: flicker 0.15s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(2px);
+            position: relative;
+            z-index: 10;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+            font-style: italic;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateY(-5px);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .card-header i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        button {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background: #ff8c00;
+            box-shadow: 0 0 15px var(--primary);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border-left: 3px solid var(--secondary);
+        }
+        .terminal {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+        .terminal-line {
+            margin-bottom: 5px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--secondary);
+        }
+        tr:hover {
+            background: rgba(255, 107, 0, 0.1);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online {
+            background: #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+        }
+        .status-offline {
+            background: #ff0000;
+        }
+        .status-warning {
+            background: #ffff00;
+            box-shadow: 0 0 8px #ffff00;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #444;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 600px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body class="flicker">
+    <div class="scanlines"></div>
+    <div class="container">
+        <header>
+            <h1>
+                ⚡ ELECTRICIAN DEV DASHBOARD ⚡
+            </h1>
+            <div class="subtitle">// nec compliant · circuits · tools · safety</div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Circuit Calculator -->
+            <div class="card">
+                <div class="card-header">
+                    <span>🧮 CIRCUIT CALCULATOR</span>
+                    <i>🔌</i>
+                </div>
+                <div class="form-group">
+                    <label for="voltage">Voltage (V)</label>
+                    <input type="number" id="voltage" value="120">
+                </div>
+                <div class="form-group">
+                    <label for="current">Current (A)</label>
+                    <input type="number" id="current" value="15">
+                </div>
+                <div class="form-group">
+                    <label for="power-factor">Power Factor</label>
+                    <input type="number" id="power-factor" value="0.8" step="0.01">
+                </div>
+                <button onclick="calculateCircuit()">Calculate Circuit Values</button>
+                <div id="circuit-result" class="result">
+                    Enter values and click Calculate
+                </div>
+            </div>
+
+            <!-- NEC Table Reference -->
+            <div class="card">
+                <div class="card-header">
+                    <span>📚 NEC TABLE REFERENCE</span>
+                    <i>📖</i>
+                </div>
+                <div class="form-group">
+                    <label for="wire-gauge">Wire Gauge (AWG)</label>
+                    <select id="wire-gauge">
+                        <option value="14">14 AWG</option>
+                        <option value="12">12 AWG</option>
+                        <option value="10">10 AWG</option>
+                        <option value="8">8 AWG</option>
+                        <option value="6">6 AWG</option>
+                        <option value="4">4 AWG</option>
+                        <option value="2">2 AWG</option>
+                        <option value="1">1 AWG</option>
+                        <option value="1/0">1/0 AWG</option>
+                        <option value="2/0">2/0 AWG</option>
+                        <option value="3/0">3/0 AWG</option>
+                        <option value="4/0">4/0 AWG</option>
+                    </select>
+                </div>
+                <button onclick="lookupWireSpecs()">Lookup Wire Specs</button>
+                <div id="wire-result" class="result">
+                    Select wire gauge and click Lookup
+                </div>
+            </div>
+
+            <!-- Terminal -->
+            <div class="card">
+                <div class="card-header">
+                    <span>💻 TERMINAL</span>
+                    <i>🖥️</i>
+                </div>
+                <div class="form-group">
+                    <label for="command-input">Enter Command</label>
+                    <input type="text" id="command-input" placeholder="Type command...">
+                </div>
+                <button onclick="executeCommand()">Execute</button>
+                <div class="terminal" id="terminal">
+                    <div class="terminal-line">⚡ Welcome to Electrician Terminal v1.0 ⚡</div>
+                    <div class="terminal-line">Type 'help' for available commands</div>
+                </div>
+            </div>
+
+            <!-- Project Health -->
+            <div class="card">
+                <div class="card-header">
+                    <span>📊 PROJECT HEALTH</span>
+                    <i>📈</i>
+                </div>
+                <div class="status-indicator status-online"></div> System Online
+                <div style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Progress:</span>
+                        <span>78%</span>
+                    </div>
+                    <div style="height: 10px; background: #333; border-radius: 5px; overflow: hidden;">
+                        <div style="height: 100%; width: 78%; background: var(--primary);"></div>
+                    </div>
+                </div>
+                <div style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Safety Score:</span>
+                        <span>94%</span>
+                    </div>
+                    <div style="height: 10px; background: #333; border-radius: 5px; overflow: hidden;">
+                        <div style="height: 100%; width: 94%; background: var(--secondary);"></div>
+                    </div>
+                </div>
+                <div style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Code Quality:</span>
+                        <span>89%</span>
+                    </div>
+                    <div style="height: 10px; background: #333; border-radius: 5px; overflow: hidden;">
+                        <div style="height: 100%; width: 89%; background: #00ff00;"></div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Active Jobs:</span>
+                        <span style="color: var(--primary);">12</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Electricians:</span>
+                        <span style="color: var(--secondary);">42</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Incidents:</span>
+                        <span style="color: #ff0000;">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEC Quick Reference -->
+            <div class="card">
+                <div class="card-header">
+                    <span>🔍 NEC QUICK REFERENCE</span>
+                    <i>📋</i>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Amperage</th>
+                                <th>Wire Size</th>
+                                <th>Breaker Type</th>
+                                <th>Application</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15A</td>
+                                <td>14 AWG</td>
+                                <td>Standard</td>
+                                <td>Lighting, Outlets</td>
+                            </tr>
+                            <tr>
+                                <td>20A</td>
+                                <td>12 AWG</td>
+                                <td>Standard</td>
+                                <td>Kitchen, Bathroom</td>
+                            </tr>
+                            <tr>
+                                <td>30A</td>
+                                <td>10 AWG</td>
+                                <td>Standard</td>
+                                <td>Dryer, A/C Unit</td>
+                            </tr>
+                            <tr>
+                                <td>40A</td>
+                                <td>8 AWG</td>
+                                <td>High Load</td>
+                                <td>Large A/C, EV Charger</td>
+                            </tr>
+                            <tr>
+                                <td>50A</td>
+                                <td>6 AWG</td>
+                                <td>High Load</td>
+                                <td>Range, Large EV</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Safety Check -->
+            <div class="card">
+                <div class="card-header">
+                    <span>🛡️ SAFETY CHECK</span>
+                    <i>⚠️</i>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="lockout-tagout"> Lockout/Tagout Verified
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="ppe-checked"> PPE Inspected
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="area-safe"> Work Area Clear
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="emergency-located"> Emergency Equipment Located
+                    </label>
+                </div>
+                <button onclick="performSafetyCheck()">Complete Safety Check</button>
+                <div id="safety-result" class="result">
+                    Complete all safety checks before proceeding
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>⚡ Electrician Dev Dashboard – Built for NEC compliance and safety ⚡</p>
+        </footer>
+    </div>
+
+    <script>
+        // Circuit Calculator
+        function calculateCircuit() {
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const current = parseFloat(document.getElementById('current').value);
+            const powerFactor = parseFloat(document.getElementById('power-factor').value);
+
+            if (isNaN(voltage) || isNaN(current)) {
+                document.getElementById('circuit-result').innerHTML = 'Please enter valid values';
+                return;
+            }
+
+            const apparentPower = voltage * current; // VA
+            const realPower = apparentPower * powerFactor; // Watts
+            const resistance = voltage / current; // Ohms
+            const impedance = voltage / current; // Ohms (assuming resistive load)
+
+            document.getElementById('circuit-result').innerHTML = `
+                <div><strong>Real Power:</strong> ${realPower.toFixed(2)} W</div>
+                <div><strong>Apparent Power:</strong> ${apparentPower.toFixed(2)} VA</div>
+                <div><strong>Resistance:</strong> ${resistance.toFixed(2)} Ω</div>
+                <div><strong>Impedance:</strong> ${impedance.toFixed(2)} Ω</div>
+                <div><strong>Power Factor:</strong> ${powerFactor}</div>
+            `;
+        }
+
+        // Wire Specifications Lookup
+        function lookupWireSpecs() {
+            const gauge = document.getElementById('wire-gauge').value;
+            const wireSpecs = {
+                '14': { ampacity: 15, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 2.52 },
+                '12': { ampacity: 20, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 1.59 },
+                '10': { ampacity: 30, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.999 },
+                '8': { ampacity: 40, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.628 },
+                '6': { ampacity: 55, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.395 },
+                '4': { ampacity: 70, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.249 },
+                '2': { ampacity: 95, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.157 },
+                '1': { ampacity: 110, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.124 },
+                '1/0': { ampacity: 125, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.098 },
+                '2/0': { ampacity: 145, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.078 },
+                '3/0': { ampacity: 165, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.062 },
+                '4/0': { ampacity: 195, volts0600: '2 AWG', volts6011000: '2 AWG', copperOhmsPer1000ft: 0.049 }
+            };
+
+            const spec = wireSpecs[gauge];
+            if (spec) {
+                document.getElementById('wire-result').innerHTML = `
+                    <div><strong>Wire Gauge:</strong> ${gauge} AWG</div>
+                    <div><strong>Ampacity:</strong> ${spec.ampacity} A</div>
+                    <div><strong>Copper Resistance:</strong> ${spec.copperOhmsPer1000ft} Ω/1000ft</div>
+                `;
+            } else {
+                document.getElementById('wire-result').innerHTML = 'Unknown wire gauge';
+            }
+        }
+
+        // Terminal Commands
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('command-input');
+
+        function executeCommand() {
+            const cmd = commandInput.value.trim();
+            if (!cmd) return;
+
+            // Add command to terminal
+            terminal.innerHTML += `<div class="terminal-line">$ ${cmd}</div>`;
+            
+            // Process command
+            let output = '';
+            switch(cmd.toLowerCase()) {
+                case 'help':
+                    output = 'Available commands: help, clear, calc, status, date, whoami';
+                    break;
+                case 'clear':
+                    terminal.innerHTML = '';
+                    commandInput.value = '';
+                    return;
+                case 'calc':
+                    output = 'Use the Circuit Calculator panel instead.';
+                    break;
+                case 'status':
+                    output = 'System Status: All systems operational. 42 electricians active.';
+                    break;
+                case 'date':
+                    output = new Date().toString();
+                    break;
+                case 'whoami':
+                    output = 'You are logged in as: electrician_dev_user';
+                    break;
+                default:
+                    output = \`Command not recognized: \${cmd}. Type 'help' for available commands.\`;
+            }
+            
+            terminal.innerHTML += \`<div class="terminal-line">\${output}</div>\`;
+            terminal.scrollTop = terminal.scrollHeight;
+            commandInput.value = '';
+        }
+
+        // Allow Enter key to execute command
+        commandInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                executeCommand();
+            }
+        });
+
+        // Safety Check
+        function performSafetyCheck() {
+            const lockout = document.getElementById('lockout-tagout').checked;
+            const ppe = document.getElementById('ppe-checked').checked;
+            const areaSafe = document.getElementById('area-safe').checked;
+            const emergencyLocated = document.getElementById('emergency-located').checked;
+
+            if (lockout && ppe && areaSafe && emergencyLocated) {
+                document.getElementById('safety-result').innerHTML = `
+                    <div style="color: #00ff00; font-weight: bold;">✓ All safety checks passed!</div>
+                    <div>You are cleared for electrical work.</div>
+                `;
+            } else {
+                document.getElementById('safety-result').innerHTML = `
+                    <div style="color: #ff0000; font-weight: bold;">✗ Safety check incomplete!</div>
+                    <div>Please complete all safety checks before proceeding.</div>
+                `;
+            }
+        }
+
+        // Initialize with some data
+        window.onload = function() {
+            calculateCircuit(); // Show initial calculation
+        };
+    </script>
+</body>
+</html>

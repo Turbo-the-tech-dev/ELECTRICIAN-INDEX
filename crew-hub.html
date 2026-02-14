@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👥 Crew Hub - 1300 Electricians</title>
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --secondary: #00aaff;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #e0e0e0;
+            --card-bg: #111111;
+            --glow: 0 0 15px rgba(255, 107, 0, 0.5);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+        }
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(2px);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--primary);
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+            font-style: italic;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+        }
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online {
+            background: #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+        }
+        .status-offline {
+            background: #ff0000;
+        }
+        .status-away {
+            background: #ffff00;
+            box-shadow: 0 0 8px #ffff00;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #444;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                👥 CREW HUB - 1300 ELECTRICIANS
+            </h1>
+            <div class="subtitle">// manage · connect · coordinate</div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span>📋 CREW DIRECTORY</span>
+                </div>
+                <p>Search and filter 1300 electricians by role, location, certification, and availability.</p>
+                <div style="margin-top: 15px;">
+                    <input type="text" placeholder="Search crew members..." style="width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px; color: var(--light);">
+                </div>
+                <div style="margin-top: 15px; max-height: 300px; overflow-y: auto;">
+                    <div style="padding: 10px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: bold;">John Smith</div>
+                            <div style="font-size: 0.9rem; color: #aaa;">Journeyman Electrician</div>
+                        </div>
+                        <div>
+                            <span class="status-indicator status-online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    <div style="padding: 10px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: bold;">Maria Garcia</div>
+                            <div style="font-size: 0.9rem; color: #aaa;">Foreman</div>
+                        </div>
+                        <div>
+                            <span class="status-indicator status-away"></span>
+                            <span>Away</span>
+                        </div>
+                    </div>
+                    <div style="padding: 10px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: bold;">Robert Johnson</div>
+                            <div style="font-size: 0.9rem; color: #aaa;">Apprentice</div>
+                        </div>
+                        <div>
+                            <span class="status-indicator status-offline"></span>
+                            <span>Offline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>💬 CREW CHAT</span>
+                </div>
+                <p>Real-time communication with your teams and individuals.</p>
+                <div style="background: #000; color: #0f0; padding: 15px; border-radius: 5px; height: 200px; overflow-y: auto; font-family: 'Courier New'; margin-top: 15px;">
+                    <div>[08:45] John Smith: Morning crew, we're starting on the 3rd floor electrical panels</div>
+                    <div>[08:47] Maria Garcia: Acknowledged. My team is on the ground floor running conduit</div>
+                    <div>[08:50] Robert Johnson: Need assistance with the main breaker installation</div>
+                </div>
+                <div style="margin-top: 15px; display: flex;">
+                    <input type="text" placeholder="Type message..." style="flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px 0 0 5px; color: var(--light);">
+                    <button style="background: var(--primary); color: black; border: none; padding: 10px 15px; border-radius: 0 5px 5px 0; font-weight: bold;">Send</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>📊 TEAM STATS</span>
+                </div>
+                <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
+                    <div>
+                        <div style="font-size: 2rem; color: var(--primary);">1300</div>
+                        <div>Total Crew</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; color: var(--secondary);">650</div>
+                        <div>On Duty</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 2rem; color: #00ff00;">42</div>
+                        <div>Days Safe</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Roles Distribution:</span>
+                    </div>
+                    <div style="height: 10px; background: #333; border-radius: 5px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="height: 100%; width: 40%; background: var(--primary); float: left;"></div>
+                        <div style="height: 100%; width: 25%; background: var(--secondary); float: left;"></div>
+                        <div style="height: 100%; width: 20%; background: #00ff00; float: left;"></div>
+                        <div style="height: 100%; width: 15%; background: #ff00ff; float: left; clear: right;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                        <span>Journeymen (40%)</span>
+                        <span>Apprentices (25%)</span>
+                        <span>Foremen (20%)</span>
+                        <span>Others (15%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>🔧 SCHEDULE & ASSIGNMENTS</span>
+                </div>
+                <p>View and manage crew assignments across all active projects.</p>
+                <div style="margin-top: 15px;">
+                    <div style="padding: 10px; background: #1a1a1a; border-radius: 5px; margin-bottom: 10px;">
+                        <div style="font-weight: bold; color: var(--primary);">Hospital Renovation - Room 305</div>
+                        <div>Foreman: Maria Garcia</div>
+                        <div>Team: 8 Electricians</div>
+                        <div>Status: In Progress</div>
+                    </div>
+                    <div style="padding: 10px; background: #1a1a1a; border-radius: 5px; margin-bottom: 10px;">
+                        <div style="font-weight: bold; color: var(--primary);">Data Center Expansion - Phase 2</div>
+                        <div>Foreman: James Wilson</div>
+                        <div>Team: 12 Electricians</div>
+                        <div>Status: Planning</div>
+                    </div>
+                    <div style="padding: 10px; background: #1a1a1a; border-radius: 5px;">
+                        <div style="font-weight: bold; color: var(--primary);">Commercial Building - Tenant Finish</div>
+                        <div>Foreman: Sarah Chen</div>
+                        <div>Team: 6 Electricians</div>
+                        <div>Status: Completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>⚡ Crew Hub – Connecting 1300 electricians across all projects ⚡</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{
+  "date": "February 14, 2026",
+  "morning_checklist": [
+    "Review daily safety briefing",
+    "Check equipment inventory",
+    "Assign crew leaders",
+    "Verify project schedules",
+    "Confirm material deliveries",
+    "Check weather conditions",
+    "Review permits and inspections"
+  ],
+  "crew_management": {
+    "daily_tracking": {
+      "headcount": 1300,
+      "shifts": [
+        {
+          "shift": "Morning",
+          "start_time": "06:00",
+          "end_time": "14:00",
+          "electricians_assigned": 650
+        },
+        {
+          "shift": "Afternoon",
+          "start_time": "14:00",
+          "end_time": "22:00",
+          "electricians_assigned": 650
+        }
+      ]
+    },
+    "roles": [
+      "Journeyman Electrician",
+      "Apprentice Electrician", 
+      "Foreman",
+      "Project Manager",
+      "Safety Officer",
+      "Inspector"
+    ]
+  },
+  "safety": {
+    "daily_safety_topic": "Lockout/Tagout Procedures",
+    "ppe_required": [
+      "Hard Hat",
+      "Safety Glasses",
+      "Steel Toe Boots",
+      "High Visibility Vest",
+      "Insulated Gloves",
+      "Fall Protection Harness"
+    ],
+    "incident_free_days": 42
+  },
+  "projects": {
+    "active_projects": 24,
+    "priority_jobs": [
+      "Hospital Renovation - Room 305",
+      "Data Center Expansion - Phase 2",
+      "Commercial Building - Tenant Finish"
+    ]
+  },
+  "equipment": {
+    "available_tools": [
+      "Multimeters",
+      "Wire Strippers",
+      "Drill Presses",
+      "Ladders",
+      "Scaffolding",
+      "Cable Pullers"
+    ],
+    "maintenance_due": [
+      "Generator #3 - Weekly Service",
+      "Scaffold Inspection - Monthly"
+    ]
+  }
+}

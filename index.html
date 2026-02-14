@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoda's Web Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .yoda-quote {
+            font-style: italic;
+            color: #2c5aa0;
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 3px solid #2c5aa0;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Yoda's Web Server</h1>
+        <div class="yoda-quote">
+            "Truly wonderful, the mind of a web developer is."
+        </div>
+        <p>This is a simple HTML page served by Python's built-in HTTP server.</p>
+        <p>May the Force (and good code) be with you!</p>
+        <button onclick="showMessage()">Click for Wisdom</button>
+        <div id="wisdom" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        function showMessage() {
+            const wisdom = [
+                "Do or do not. There is no try.",
+                "Truly wonderful, the mind of a recursive programmer is.",
+                "Size matters not. Look at me. Judge me by my size, do you?",
+                "Fear is the path to the dark side.",
+                "Patience you must have. My young padawan."
+            ];
+            const randomWisdom = wisdom[Math.floor(Math.random() * wisdom.length)];
+            document.getElementById('wisdom').innerHTML = '<p><strong>Yoda Says:</strong> "' + randomWisdom + '"</p>';
+        }
+    </script>
+</body>
+</html>
