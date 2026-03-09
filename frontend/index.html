@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrician Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Electrician Directory</h1>
+            <p class="text-gray-600">Find reliable electricians near you.</p>
+        </header>
+
+        <div class="mb-6">
+            <input type="text" id="searchInput" placeholder="Search by name, city..." class="w-full p-3 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div id="electriciansList" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Electricians will be loaded here -->
+            <div class="bg-white p-6 rounded shadow animate-pulse h-40"></div>
+            <div class="bg-white p-6 rounded shadow animate-pulse h-40"></div>
+            <div class="bg-white p-6 rounded shadow animate-pulse h-40"></div>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:8765/api/electricians';
+        const listEl = document.getElementById('electriciansList');
+        const searchInput = document.getElementById('searchInput');
+
+        async function fetchElectricians(query = '') {
+            try {
+                const response = await fetch(`${apiUrl}${query ? `?q=${query}` : ''}`);
+                const data = await response.json();
+                renderElectricians(data);
+            } catch (err) {
+                console.error('Failed to fetch:', err);
+                listEl.innerHTML = '<p class="text-red-500">Failed to load electricians.</p>';
+            }
+        }
+
+        function renderElectricians(electricians) {
+            if (electricians.length === 0) {
+                listEl.innerHTML = '<p class="col-span-full text-center py-10 text-gray-500">No electricians found.</p>';
+                return;
+            }
+
+            listEl.innerHTML = electricians.map(e => `
+                <div class="bg-white p-6 rounded shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-2">
+                        <h2 class="text-xl font-bold text-gray-800">${e.name}</h2>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">${e.rating.toFixed(1)} ★</span>
+                    </div>
+                    <p class="text-gray-600 mb-1">${e.city}, ${e.state}</p>
+                    <p class="text-sm text-gray-500 mb-4">${e.services.join(', ')}</p>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-blue-600 font-medium">${e.phone}</span>
+                        ${e.emergency ? '<span class="text-red-600 font-bold uppercase text-[10px]">Emergency 24/7</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            fetchElectricians(e.target.value);
+        });
+
+        // Initial load
+        fetchElectricians();
+    </script>
+</body>
+</html>

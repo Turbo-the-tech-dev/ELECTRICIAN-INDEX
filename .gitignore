@@ -1,0 +1,5 @@
+/target
+/dist
+.env
+*.log
+Cargo.lock
