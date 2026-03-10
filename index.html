@@ -3,68 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoda's Web Server</title>
+    <title>ELECTRICIAN-INDEX:~$</title>
     <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --text-color: #00ff41; /* Classic Matrix/Terminal Green */
+            --accent-color: #ffffff;
+            --font-family: 'Courier New', Courier, monospace;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
+            line-height: 1.6;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
+
+        header {
+            border-bottom: 1px solid var(--text-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
         }
-        .yoda-quote {
-            font-style: italic;
-            color: #2c5aa0;
-            margin: 20px 0;
-            padding: 15px;
-            border-left: 3px solid #2c5aa0;
-            background-color: #f9f9f9;
+
+        .prompt { color: var(--accent-color); }
+        
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            border: 1px transparent;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+
+        a:hover {
+            background-color: var(--text-color);
+            color: var(--bg-color);
         }
-        button:hover {
-            background-color: #45a049;
+
+        .dir-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dir-list li::before {
+            content: "-> ";
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            background-color: var(--text-color);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Yoda's Web Server</h1>
-        <div class="yoda-quote">
-            "Truly wonderful, the mind of a web developer is."
-        </div>
-        <p>This is a simple HTML page served by Python's built-in HTTP server.</p>
-        <p>May the Force (and good code) be with you!</p>
-        <button onclick="showMessage()">Click for Wisdom</button>
-        <div id="wisdom" style="margin-top: 20px;"></div>
-    </div>
 
-    <script>
-        function showMessage() {
-            const wisdom = [
-                "Do or do not. There is no try.",
-                "Truly wonderful, the mind of a recursive programmer is.",
-                "Size matters not. Look at me. Judge me by my size, do you?",
-                "Fear is the path to the dark side.",
-                "Patience you must have. My young padawan."
-            ];
-            const randomWisdom = wisdom[Math.floor(Math.random() * wisdom.length)];
-            document.getElementById('wisdom').innerHTML = '<p><strong>Yoda Says:</strong> "' + randomWisdom + '"</p>';
-        }
-    </script>
+<header>
+    <div><span class="prompt">guest@electrician-index:~$</span> ls --directory</div>
+    <h1>ELECTRICIAN_INDEX_V1.0</h1>
+</header>
+
+<main>
+    <p>Select a region or service category below:</p>
+    
+    <ul class="dir-list">
+        <li><a href="residential.html">/RESIDENTIAL_SERVICES</a></li>
+        <li><a href="commercial.html">/COMMERCIAL_INDUSTRIAL</a></li>
+        <li><a href="emergency.html">/EMERGENCY_REPAIRS</a></li>
+        <li><a href="contractors.html">/LICENSED_CONTRACTORS_LIST</a></li>
+    </ul>
+
+    <p><span class="prompt">guest@electrician-index:~$</span> <span class="cursor">&nbsp;</span></p>
+</main>
+
+<footer>
+    [SYSTEM READY] - Built for efficiency and accessibility.
+</footer>
+
 </body>
 </html>
